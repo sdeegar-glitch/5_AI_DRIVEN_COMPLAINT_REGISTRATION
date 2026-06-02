@@ -1,0 +1,1 @@
+ALTER TABLE "complaints" ALTER COLUMN "incident_datetime" SET DATA TYPE text;
