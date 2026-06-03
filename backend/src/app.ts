@@ -14,6 +14,9 @@ const app = express();
 const ALLOWED_ORIGINS = [
   "http://localhost:6001",
   "http://127.0.0.1:6001",
+  "https://abhay.devtshq.space",
+  "http://abhay.devtshq.space",
+  "https://sdeegar-glitch.github.io",
 ];
 
 // Mount HTTP Request Logger (Morgan)

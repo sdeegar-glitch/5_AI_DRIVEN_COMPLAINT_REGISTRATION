@@ -1,5 +1,9 @@
 import { OpenAI } from "openai";
 import { env } from "../../../config/env.js";
+import { createRequire } from "module";
+
+const require = createRequire(import.meta.url);
+const pdfParse = require("pdf-parse");
 
 console.log("[OpenAI] [ENTRY] Initializing OpenAI SDK client...");
 const openai = new OpenAI({
@@ -16,6 +20,97 @@ export interface ParsedDraft {
   complaintDescription: string | null;
   ipcSections: string[];
   title: string;
+}
+
+/**
+ * Parses a complaint PDF file by extracting text and parsing with OpenAI.
+ * 
+ * @param fileBuffer Buffer containing PDF contents
+ */
+export async function parseComplaintPdf(
+  fileBuffer: Buffer
+): Promise<ParsedDraft> {
+  console.log("[OpenAI] [ENTRY] parseComplaintPdf called.");
+
+  let pdfText = "";
+  try {
+    const pdfData = await pdfParse(fileBuffer);
+    pdfText = pdfData.text?.trim() || "";
+  } catch (error) {
+    console.error("[OpenAI] [ERROR] pdf-parse failed:", error);
+    throw new Error("Failed to parse PDF file. Ensure it is not corrupted.");
+  }
+
+  if (!pdfText || pdfText.length < 10) {
+    throw new Error(
+      "Could not extract readable text from the PDF file. If it is a scanned document, please upload it as an image (JPEG/PNG) or use a text-selectable PDF."
+    );
+  }
+
+  const systemPrompt = `You are an expert legal assistant. Analyze the provided text of a complaint letter.
+Extract the details into the following JSON structure. If any field is missing or cannot be inferred, return null.
+
+Fields:
+1. complainantName: Full name of the complainant.
+2. complainantContact: Phone, email, or address.
+3. incidentDateTime: Date & time of the incident (extract raw text or convert to standard ISO format if possible, otherwise write the raw description).
+4. incidentPlace: Specific place of incident (District/PS).
+5. accusedDetails: Name or description of accused persons.
+6. complaintDescription: A detailed summary of the events described.
+7. ipcSections: Suggest list of Indian Penal Code section codes applicable, structured like ["IPC 379", "IPC 420"].
+8. title: Generate an action-phrase summary of the crime strictly under 12 characters (e.g. "Theft", "Fraud Case", "Burglary").
+
+You MUST return a raw, valid JSON object containing only these fields. Do not include markdown code block syntax (like \`\`\`json) in your response.`;
+
+  try {
+    console.log("[OpenAI] Calling gpt-5.4-mini via Responses API with extracted PDF text...");
+
+    const response: any = await (openai as any).responses.create({
+      model: "gpt-5.4-mini",
+      input: [
+        {
+          role: "user",
+          content: [
+            {
+              type: "input_text",
+              text: systemPrompt,
+            },
+            {
+              type: "input_text",
+              text: `Here is the extracted text from the PDF complaint letter:\n\n${pdfText}`,
+            },
+          ],
+        },
+      ],
+    });
+
+    const outputText = response.output_text;
+    console.log("[OpenAI] Received outputText from Responses API for PDF:", outputText);
+
+    if (!outputText) {
+      throw new Error("Empty response returned from OpenAI Responses API");
+    }
+
+    const cleanedText = outputText
+      .replace(/```json/g, "")
+      .replace(/```/g, "")
+      .trim();
+
+    const parsed: ParsedDraft = JSON.parse(cleanedText);
+
+    if (parsed.title && parsed.title.length > 12) {
+      parsed.title = parsed.title.slice(0, 12);
+    }
+    if (!parsed.title) {
+      parsed.title = "Complaint";
+    }
+
+    console.log("[OpenAI] [EXIT] PDF successfully parsed.");
+    return parsed;
+  } catch (error) {
+    console.error("[OpenAI] [ERROR] Exception caught in parseComplaintPdf:", error);
+    throw error;
+  }
 }
 
 /**

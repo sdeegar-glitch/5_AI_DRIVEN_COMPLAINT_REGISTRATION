@@ -40,6 +40,8 @@ export const Home: React.FC = () => {
 
   // Draft review states
   const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [localPreviewUrl, setLocalPreviewUrl] = useState<string | null>(null);
+  const [fileType, setFileType] = useState<string | null>(null);
   const [draft, setDraft] = useState<ParsedDraft | null>(null);
   const [newIpcTag, setNewIpcTag] = useState("");
 
@@ -72,6 +74,9 @@ export const Home: React.FC = () => {
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       const file = e.dataTransfer.files[0];
       if (file.type.startsWith("image/") || file.type === "application/pdf") {
+        const previewUrl = URL.createObjectURL(file);
+        setLocalPreviewUrl(previewUrl);
+        setFileType(file.type);
         handleUpload(file);
       } else {
         setError("Invalid file format. Please upload a valid JPEG, PNG, or PDF file.");
@@ -87,7 +92,14 @@ export const Home: React.FC = () => {
 
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
-      handleUpload(file);
+      if (file.type.startsWith("image/") || file.type === "application/pdf") {
+        const previewUrl = URL.createObjectURL(file);
+        setLocalPreviewUrl(previewUrl);
+        setFileType(file.type);
+        handleUpload(file);
+      } else {
+        setError("Invalid file format. Please upload a valid JPEG, PNG, or PDF file.");
+      }
     }
   };
 
@@ -202,6 +214,11 @@ export const Home: React.FC = () => {
         // Reset states
         setDraft(null);
         setImageUrl(null);
+        setFileType(null);
+        if (localPreviewUrl) {
+          URL.revokeObjectURL(localPreviewUrl);
+        }
+        setLocalPreviewUrl(null);
         
         refreshUser(); // sync limits
       } else {
@@ -218,6 +235,11 @@ export const Home: React.FC = () => {
   const handleCancelReview = () => {
     setDraft(null);
     setImageUrl(null);
+    setFileType(null);
+    if (localPreviewUrl) {
+      URL.revokeObjectURL(localPreviewUrl);
+    }
+    setLocalPreviewUrl(null);
     setError(null);
     setSuccess(null);
   };
@@ -413,15 +435,35 @@ export const Home: React.FC = () => {
           /* Side-by-side Draft Review Form Workspace */
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             
-            {/* Left Column: Image preview */}
+            {/* Left Column: Document preview */}
             <div className="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-lg space-y-4">
-              <h3 className="text-sm font-bold text-slate-300">Original Document Preview</h3>
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-bold text-slate-300">Original Document Preview</h3>
+                {(localPreviewUrl || imageUrl) && (
+                  <a 
+                    href={localPreviewUrl || imageUrl || undefined} 
+                    target="_blank" 
+                    rel="noreferrer" 
+                    className="text-xs text-indigo-400 hover:text-indigo-300 hover:underline flex items-center gap-1"
+                  >
+                    Open in new tab
+                  </a>
+                )}
+              </div>
               <div className="border border-slate-850 rounded-lg overflow-hidden bg-slate-950 flex items-center justify-center min-h-[300px] max-h-[500px]">
-                <img
-                  src={imageUrl || undefined}
-                  alt="Original complaint scan"
-                  className="object-contain max-h-[480px] w-full"
-                />
+                {fileType === "application/pdf" || (imageUrl && imageUrl.toLowerCase().includes(".pdf")) ? (
+                  <iframe
+                    src={localPreviewUrl || imageUrl || undefined}
+                    title="Original PDF preview"
+                    className="w-full h-[480px] border-0"
+                  />
+                ) : (
+                  <img
+                    src={localPreviewUrl || imageUrl || undefined}
+                    alt="Original complaint scan"
+                    className="object-contain max-h-[480px] w-full"
+                  />
+                )}
               </div>
             </div>
 

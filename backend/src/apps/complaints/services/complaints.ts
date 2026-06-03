@@ -2,7 +2,7 @@ import { eq, and, or, like, sql } from "drizzle-orm";
 import { db } from "../../../db/db.js";
 import { users, complaints, complaintEmbeddings } from "../../../db/schema/schema.js";
 import { uploadImage } from "./supabase.js";
-import { parseComplaintImage, generateEmbedding, ParsedDraft } from "./openai.js";
+import { parseComplaintImage, parseComplaintPdf, generateEmbedding, ParsedDraft } from "./openai.js";
 import { SaveComplaintInput } from "../dtos/complaints.js";
 
 export async function parseImageService(
@@ -30,11 +30,14 @@ export async function parseImageService(
     // 2. Upload file to Supabase Storage
     const imageUrl = await uploadImage(fileBuffer, fileName, mimeType);
 
-    // 3. Convert buffer to base64
-    const base64Image = fileBuffer.toString("base64");
-
-    // 4. Call OpenAI Responses API to parse image
-    const draft = await parseComplaintImage(base64Image, mimeType);
+    // 3. Call OpenAI Responses API to parse image or PDF text
+    let draft;
+    if (mimeType === "application/pdf") {
+      draft = await parseComplaintPdf(fileBuffer);
+    } else {
+      const base64Image = fileBuffer.toString("base64");
+      draft = await parseComplaintImage(base64Image, mimeType);
+    }
 
     // 5. Increment user's uploadsUsed limit on success only
     await db.update(users)
