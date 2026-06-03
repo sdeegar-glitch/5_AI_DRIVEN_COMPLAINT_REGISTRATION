@@ -158,7 +158,6 @@ export const Home: React.FC = () => {
         const { imageUrl, draft: aiDraft } = response.data.data;
         setImageUrl(imageUrl);
         
-        // Clean draft fields to ensure they are never null for our form bindings
         setDraft({
           complainantName: aiDraft.complainantName || "",
           complainantContact: aiDraft.complainantContact || "",
@@ -196,7 +195,6 @@ export const Home: React.FC = () => {
   const addIpcTag = () => {
     if (!draft || !newIpcTag.trim()) return;
     
-    // Prefix with "IPC " automatically if not typed
     let tag = newIpcTag.trim();
     if (!tag.toUpperCase().startsWith("IPC ")) {
       tag = `IPC ${tag}`;
@@ -281,37 +279,37 @@ export const Home: React.FC = () => {
   const isLimitReached = user && user.uploadsUsed >= user.uploadLimit;
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
+    <div className="min-h-screen bg-bg-base text-text-main flex flex-col font-sans transition-colors duration-200">
       {/* Premium Dashboard Header */}
-      <header className="border-b border-slate-900 bg-slate-950/70 backdrop-blur-md px-6 py-4 flex items-center justify-between sticky top-0 z-50">
+      <header className="border-b border-border-main bg-bg-surface/70 backdrop-blur-md px-6 py-4 flex items-center justify-between sticky top-0 z-50 transition-colors duration-200">
         <div className="flex items-center gap-3">
-          <div className="bg-red-500/10 p-2 rounded-lg border border-red-500/20 flex items-center justify-center">
-            <ShieldAlert className="w-6 h-6 text-red-500" />
+          <div className="bg-brand-accent/10 p-2 rounded-lg border border-brand-accent/20 flex items-center justify-center">
+            <ShieldAlert className="w-6 h-6 text-brand-accent" />
           </div>
           <div>
-            <h1 className="text-xl font-bold tracking-tight text-white flex items-center gap-2">
+            <h1 className="text-xl font-bold tracking-tight text-text-main flex items-center gap-2">
               ABHAY
-              <span className="text-[10px] bg-slate-800 text-slate-400 border border-slate-700 px-1.5 py-0.5 rounded font-mono font-normal">
+              <span className="text-[10px] bg-bg-panel text-text-muted border border-border-main px-1.5 py-0.5 rounded font-mono font-normal">
                 Workspace
               </span>
             </h1>
-            <p className="text-xs text-slate-400">AI-Based Helpdesk for Assistance & Your Complaints</p>
+            <p className="text-xs text-text-muted">AI-Based Helpdesk for Assistance & Your Complaints</p>
           </div>
         </div>
 
         <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-lg">
-            <UserIcon className="w-4 h-4 text-slate-400" />
+          <div className="flex items-center gap-2 bg-bg-panel border border-border-main px-3 py-1.5 rounded-lg">
+            <UserIcon className="w-4 h-4 text-text-muted" />
             <div className="text-left leading-tight">
-              <p className="text-xs font-semibold text-white">{user?.name}</p>
-              <p className="text-[10px] text-slate-500 font-mono capitalize">{user?.role}</p>
+              <p className="text-xs font-semibold text-text-main">{user?.name}</p>
+              <p className="text-[10px] text-text-muted font-mono capitalize">{user?.role}</p>
             </div>
           </div>
           <button
             onClick={handleLogout}
-            className="flex items-center gap-2 text-xs font-semibold bg-slate-900 border border-slate-800 px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-white transition-colors cursor-pointer"
+            className="flex items-center gap-2 text-xs font-semibold bg-bg-panel border border-border-main px-3 py-2 rounded-lg hover:bg-bg-base hover:text-text-main transition-colors cursor-pointer"
           >
-            <LogOut className="w-4 h-4 text-slate-400" />
+            <LogOut className="w-4 h-4 text-text-muted" />
             Sign Out
           </button>
         </div>
@@ -322,13 +320,13 @@ export const Home: React.FC = () => {
         
         {/* Success/Error Banners */}
         {success && (
-          <div className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 p-4 rounded-xl flex items-start gap-3 text-sm">
+          <div className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 p-4 rounded-xl flex items-start gap-3 text-sm">
             <CheckCircle2 className="w-5 h-5 shrink-0 mt-0.5" />
             <span>{success}</span>
           </div>
         )}
         {error && (
-          <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-xl flex items-start gap-3 text-sm">
+          <div className="bg-brand-accent/10 border border-brand-accent/20 text-brand-accent p-4 rounded-xl flex items-start gap-3 text-sm">
             <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5" />
             <span>{error}</span>
           </div>
@@ -341,13 +339,13 @@ export const Home: React.FC = () => {
             
             {/* Upload form block */}
             <div className="lg:col-span-8 space-y-6">
-              <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 md:p-8 space-y-6 shadow-lg">
+              <div className="bg-bg-surface border border-border-main rounded-xl p-6 md:p-8 space-y-6 shadow-lg transition-colors duration-200">
                 <div>
-                  <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                    <Sparkles className="w-5 h-5 text-indigo-400" />
+                  <h2 className="text-lg font-bold text-text-main flex items-center gap-2">
+                    <Sparkles className="w-5 h-5 text-brand-primary" />
                     AI-Driven FIR Draft Generation
                   </h2>
-                  <p className="text-xs text-slate-400 mt-1">
+                  <p className="text-xs text-text-muted mt-1">
                     Upload your complaint letter image (printed or handwritten). Our multi-modal AI parser will automatically generate structured legal complaint drafts.
                   </p>
                 </div>
@@ -360,11 +358,11 @@ export const Home: React.FC = () => {
                   onDrop={handleDrop}
                   onClick={() => !isLimitReached && !loading && fileInputRef.current?.click()}
                   className={`border-2 border-dashed rounded-xl p-16 text-center transition-all relative ${
-                    dragActive ? "border-white bg-slate-800/40" : "border-slate-800 bg-slate-950/20"
+                    dragActive ? "border-text-main bg-bg-panel/40" : "border-border-main bg-bg-panel/20"
                   } ${
                     isLimitReached 
-                      ? "opacity-50 cursor-not-allowed border-red-500/20 bg-red-500/5" 
-                      : "cursor-pointer hover:border-slate-700"
+                      ? "opacity-50 cursor-not-allowed border-brand-accent/20 bg-brand-accent/5" 
+                      : "cursor-pointer hover:border-text-muted"
                   }`}
                 >
                   <input
@@ -378,31 +376,31 @@ export const Home: React.FC = () => {
 
                   {loading ? (
                     <div className="space-y-4">
-                      <div className="w-12 h-12 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center mx-auto animate-spin">
-                        <Loader className="w-5 h-5 text-indigo-400" />
+                      <div className="w-12 h-12 rounded-lg bg-brand-primary/10 border border-brand-primary/20 flex items-center justify-center mx-auto animate-spin">
+                        <Loader className="w-5 h-5 text-brand-primary" />
                       </div>
                       <div className="space-y-1">
-                        <p className="text-sm font-semibold text-slate-200 animate-pulse">Uploading & Parsing complaint with OpenAI...</p>
-                        <p className="text-xs text-slate-500">Connecting to Responses API. Please hold...</p>
+                        <p className="text-sm font-semibold text-text-main animate-pulse">Uploading & Parsing complaint with OpenAI...</p>
+                        <p className="text-xs text-text-muted">Connecting to Responses API. Please hold...</p>
                       </div>
                     </div>
                   ) : (
                     <div className="space-y-4">
                       <div className={`w-12 h-12 rounded-lg flex items-center justify-center mx-auto transition-colors ${
-                        isLimitReached ? "bg-red-500/10 border border-red-500/20" : "bg-slate-950 border border-slate-800"
+                        isLimitReached ? "bg-brand-accent/10 border border-brand-accent/20" : "bg-bg-panel border border-border-main"
                       }`}>
-                        <Upload className={`w-5 h-5 ${isLimitReached ? "text-red-500" : "text-slate-400"}`} />
+                        <Upload className={`w-5 h-5 ${isLimitReached ? "text-brand-accent" : "text-text-muted"}`} />
                       </div>
                       
                       {isLimitReached ? (
                         <div className="space-y-1">
-                          <p className="text-sm font-semibold text-red-400">Upload Limit Reached</p>
-                          <p className="text-xs text-slate-500">Please request an administrator to expand your usage limits.</p>
+                          <p className="text-sm font-semibold text-brand-accent">Upload Limit Reached</p>
+                          <p className="text-xs text-text-muted">Please request an administrator to expand your usage limits.</p>
                         </div>
                       ) : (
                         <div className="space-y-1 block">
-                          <p className="text-sm font-semibold text-slate-200">Drag & drop complaint image, or click to browse</p>
-                          <p className="text-xs text-slate-500">Supports JPEG, PNG, or PDF formats (Max 10MB)</p>
+                          <p className="text-sm font-semibold text-text-main">Drag & drop complaint image, or click to browse</p>
+                          <p className="text-xs text-text-muted">Supports JPEG, PNG, or PDF formats (Max 10MB)</p>
                         </div>
                       )}
                     </div>
@@ -413,8 +411,8 @@ export const Home: React.FC = () => {
 
             {/* Quota Limits side block */}
             <div className="lg:col-span-4 space-y-6">
-              <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-6 shadow-lg">
-                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 border-b border-slate-800 pb-3">
+              <div className="bg-bg-surface border border-border-main rounded-xl p-6 space-y-6 shadow-lg transition-colors duration-200">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-text-muted border-b border-border-main pb-3">
                   Account Limits & Status
                 </h3>
 
@@ -422,15 +420,15 @@ export const Home: React.FC = () => {
                   {/* Upload limit bar */}
                   <div className="space-y-2">
                     <div className="flex items-center justify-between text-xs">
-                      <span className="text-slate-400 font-semibold flex items-center gap-1.5">
-                        <Upload className="w-3.5 h-3.5 text-slate-500" />
+                      <span className="text-text-muted font-semibold flex items-center gap-1.5">
+                        <Upload className="w-3.5 h-3.5 text-text-muted" />
                         Image Uploads
                       </span>
-                      <span className="font-mono text-white font-bold">{user?.uploadsUsed} / {user?.uploadLimit}</span>
+                      <span className="font-mono text-text-main font-bold">{user?.uploadsUsed} / {user?.uploadLimit}</span>
                     </div>
-                    <div className="h-2 bg-slate-950 rounded-full overflow-hidden border border-slate-850">
+                    <div className="h-2 bg-bg-panel rounded-full overflow-hidden border border-border-main">
                       <div 
-                        className={`h-full rounded-full transition-all ${isLimitReached ? "bg-red-500" : "bg-white"}`}
+                        className={`h-full rounded-full transition-all ${isLimitReached ? "bg-brand-accent" : "bg-brand-primary"}`}
                         style={{ width: `${Math.min(100, ((user?.uploadsUsed || 0) / (user?.uploadLimit || 5)) * 100)}%` }}
                       ></div>
                     </div>
@@ -439,24 +437,24 @@ export const Home: React.FC = () => {
                   {/* Search limit bar */}
                   <div className="space-y-2">
                     <div className="flex items-center justify-between text-xs">
-                      <span className="text-slate-400 font-semibold flex items-center gap-1.5">
-                        <Search className="w-3.5 h-3.5 text-slate-500" />
+                      <span className="text-text-muted font-semibold flex items-center gap-1.5">
+                        <Search className="w-3.5 h-3.5 text-text-muted" />
                         AI Semantic Searches
                       </span>
-                      <span className="font-mono text-white font-bold">{user?.searchesUsed} / {user?.searchLimit}</span>
+                      <span className="font-mono text-text-main font-bold">{user?.searchesUsed} / {user?.searchLimit}</span>
                     </div>
-                    <div className="h-2 bg-slate-950 rounded-full overflow-hidden border border-slate-850">
+                    <div className="h-2 bg-bg-panel rounded-full overflow-hidden border border-border-main">
                       <div 
-                        className="h-full bg-white rounded-full transition-all"
+                        className="h-full bg-brand-primary rounded-full transition-all"
                         style={{ width: `${Math.min(100, ((user?.searchesUsed || 0) / (user?.searchLimit || 10)) * 100)}%` }}
                       ></div>
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-slate-950 border border-slate-850 rounded-lg p-3.5 text-[11px] text-slate-400 space-y-1.5">
-                  <p className="font-semibold text-white flex items-center gap-1">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+                <div className="bg-bg-panel border border-border-main rounded-lg p-3.5 text-[11px] text-text-muted space-y-1.5">
+                  <p className="font-semibold text-text-main flex items-center gap-1">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-650 dark:text-emerald-500" />
                     Secure FIR Registry Active
                   </p>
                   <p>All finalized complaints generate vector embeddings automatically for legal search indexation.</p>
@@ -470,21 +468,21 @@ export const Home: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             
             {/* Left Column: Document preview */}
-            <div className="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-lg space-y-4">
+            <div className="lg:col-span-5 bg-bg-surface border border-border-main rounded-xl p-4 shadow-lg space-y-4 transition-colors duration-200">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-bold text-slate-300">Original Document Preview</h3>
+                <h3 className="text-sm font-bold text-text-main">Original Document Preview</h3>
                 {(localPreviewUrl || imageUrl) && (
                   <a 
                     href={localPreviewUrl || imageUrl || undefined} 
                     target="_blank" 
                     rel="noreferrer" 
-                    className="text-xs text-indigo-400 hover:text-indigo-300 hover:underline flex items-center gap-1"
+                    className="text-xs text-brand-primary hover:opacity-85 hover:underline flex items-center gap-1 font-semibold"
                   >
                     Open in new tab
                   </a>
                 )}
               </div>
-              <div className="border border-slate-850 rounded-lg overflow-hidden bg-slate-950 flex items-center justify-center min-h-[300px] max-h-[500px]">
+              <div className="border border-border-main rounded-lg overflow-hidden bg-bg-panel flex items-center justify-center min-h-[300px] max-h-[500px]">
                 {fileType === "application/pdf" || (imageUrl && imageUrl.toLowerCase().includes(".pdf")) ? (
                   <iframe
                     src={localPreviewUrl || imageUrl || undefined}
@@ -502,19 +500,19 @@ export const Home: React.FC = () => {
             </div>
 
             {/* Right Column: Editable Draft Form */}
-            <div className="lg:col-span-7 bg-slate-900 border border-slate-800 rounded-xl p-6 md:p-8 shadow-lg">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
+            <div className="lg:col-span-7 bg-bg-surface border border-border-main rounded-xl p-6 md:p-8 shadow-lg transition-colors duration-200">
+              <div className="flex items-center justify-between border-b border-border-main pb-4 mb-6">
                 <div>
-                  <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                    <FileSpreadsheet className="w-5 h-5 text-emerald-400" />
+                  <h2 className="text-lg font-bold text-text-main flex items-center gap-2">
+                    <FileSpreadsheet className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                     Review & Correct FIR Draft
                   </h2>
-                  <p className="text-xs text-slate-400 mt-0.5">Correct parsed fields before committing to database records.</p>
+                  <p className="text-xs text-text-muted mt-0.5">Correct parsed fields before committing to database records.</p>
                 </div>
                 <button
                   type="button"
                   onClick={handleCancelReview}
-                  className="text-xs bg-slate-950 border border-slate-800 hover:border-slate-700 px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition-colors cursor-pointer"
+                  className="text-xs bg-bg-panel border border-border-main hover:border-text-muted px-3 py-1.5 rounded-lg text-text-muted hover:text-text-main transition-colors cursor-pointer"
                 >
                   Discard Draft
                 </button>
@@ -523,7 +521,7 @@ export const Home: React.FC = () => {
               <form onSubmit={handleSaveComplaint} className="space-y-5">
                 {/* Title */}
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-300">Action-Phrase Title (Max 12 Chars)</label>
+                  <label className="text-xs font-semibold text-text-main block">Action-Phrase Title (Max 12 Chars)</label>
                   <input
                     type="text"
                     required
@@ -531,107 +529,107 @@ export const Home: React.FC = () => {
                     value={draft.title}
                     onChange={(e) => updateDraftField("title", e.target.value)}
                     placeholder="e.g. Theft"
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-slate-700 transition-colors"
+                    className="w-full bg-bg-panel border border-border-main rounded-lg px-3 py-2 text-sm text-text-main focus:outline-none focus:border-brand-primary transition-colors"
                   />
                 </div>
 
                 {/* Complainant Name */}
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-300">Complainant Name</label>
+                  <label className="text-xs font-semibold text-text-main block">Complainant Name</label>
                   <input
                     type="text"
                     required
                     value={draft.complainantName}
                     onChange={(e) => updateDraftField("complainantName", e.target.value)}
                     placeholder="Complainant full name"
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-slate-700 transition-colors"
+                    className="w-full bg-bg-panel border border-border-main rounded-lg px-3 py-2 text-sm text-text-main focus:outline-none focus:border-brand-primary transition-colors"
                   />
                 </div>
 
                 {/* Complainant Contact/Address */}
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-300">Complainant Contact / Address</label>
+                  <label className="text-xs font-semibold text-text-main block">Complainant Contact / Address</label>
                   <textarea
                     required
                     rows={2}
                     value={draft.complainantContact}
                     onChange={(e) => updateDraftField("complainantContact", e.target.value)}
                     placeholder="Address, Phone or Email details"
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-slate-700 transition-colors resize-none"
+                    className="w-full bg-bg-panel border border-border-main rounded-lg px-3 py-2 text-sm text-text-main focus:outline-none focus:border-brand-primary transition-colors resize-none"
                   />
                 </div>
 
                 {/* Date & Time of Incident */}
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-300">Date & Time of Incident</label>
+                  <label className="text-xs font-semibold text-text-main block">Date & Time of Incident</label>
                   <input
                     type="text"
                     required
                     value={draft.incidentDateTime}
                     onChange={(e) => updateDraftField("incidentDateTime", e.target.value)}
                     placeholder="Date time description"
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-slate-700 transition-colors"
+                    className="w-full bg-bg-panel border border-border-main rounded-lg px-3 py-2 text-sm text-text-main focus:outline-none focus:border-brand-primary transition-colors"
                   />
                 </div>
 
                 {/* Place of Incident */}
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-300">Place of Incident (District/PS)</label>
+                  <label className="text-xs font-semibold text-text-main block">Place of Incident (District/PS)</label>
                   <input
                     type="text"
                     required
                     value={draft.incidentPlace}
                     onChange={(e) => updateDraftField("incidentPlace", e.target.value)}
                     placeholder="e.g. Sector-62, Noida PS"
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-slate-700 transition-colors"
+                    className="w-full bg-bg-panel border border-border-main rounded-lg px-3 py-2 text-sm text-text-main focus:outline-none focus:border-brand-primary transition-colors"
                   />
                 </div>
 
                 {/* Accused Suspect Details */}
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-300">Accused / Suspect Details</label>
+                  <label className="text-xs font-semibold text-text-main block">Accused / Suspect Details</label>
                   <input
                     type="text"
                     required
                     value={draft.accusedDetails}
                     onChange={(e) => updateDraftField("accusedDetails", e.target.value)}
                     placeholder="Names, descriptions or 'Unknown'"
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-slate-700 transition-colors"
+                    className="w-full bg-bg-panel border border-border-main rounded-lg px-3 py-2 text-sm text-text-main focus:outline-none focus:border-brand-primary transition-colors"
                   />
                 </div>
 
                 {/* Description */}
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-300">Complaint Description</label>
+                  <label className="text-xs font-semibold text-text-main block">Complaint Description</label>
                   <textarea
                     required
                     rows={4}
                     value={draft.complaintDescription}
                     onChange={(e) => updateDraftField("complaintDescription", e.target.value)}
                     placeholder="Chronological event summary details"
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-slate-700 transition-colors"
+                    className="w-full bg-bg-panel border border-border-main rounded-lg px-3 py-2 text-sm text-text-main focus:outline-none focus:border-brand-primary transition-colors"
                   />
                 </div>
 
                 {/* Suggested IPC Tags Multiselect */}
                 <div className="space-y-2">
-                  <label className="text-xs font-semibold text-slate-300 block">IPC Sections Suggested</label>
+                  <label className="text-xs font-semibold text-text-main block">IPC Sections Suggested</label>
                   
                   {/* Tag List */}
-                  <div className="flex flex-wrap gap-2 min-h-8 p-2 bg-slate-950 border border-slate-850 rounded-lg">
+                  <div className="flex flex-wrap gap-2 min-h-8 p-2 bg-bg-panel border border-border-main rounded-lg">
                     {draft.ipcSections.length === 0 ? (
-                      <span className="text-xs text-slate-500 font-mono italic p-1">No IPC tags added yet.</span>
+                      <span className="text-xs text-text-muted font-mono italic p-1">No IPC tags added yet.</span>
                     ) : (
                       draft.ipcSections.map((tag) => (
                         <span 
                           key={tag} 
-                          className="bg-slate-900 border border-slate-800 text-xs px-2.5 py-1 rounded-full text-slate-300 flex items-center gap-1.5 font-semibold font-mono"
+                          className="bg-bg-surface border border-border-main text-xs px-2.5 py-1 rounded-full text-brand-primary flex items-center gap-1.5 font-semibold font-mono"
                         >
                           {tag}
                           <button
                             type="button"
                             onClick={() => removeIpcTag(tag)}
-                            className="text-slate-500 hover:text-white transition-colors cursor-pointer"
+                            className="text-text-muted hover:text-text-main transition-colors cursor-pointer"
                           >
                             <X className="w-3 h-3" />
                           </button>
@@ -647,12 +645,12 @@ export const Home: React.FC = () => {
                       value={newIpcTag}
                       onChange={(e) => setNewIpcTag(e.target.value)}
                       placeholder="e.g. IPC 379"
-                      className="bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-slate-700 transition-colors font-mono"
+                      className="bg-bg-panel border border-border-main rounded-lg px-3 py-1.5 text-xs text-text-main focus:outline-none focus:border-brand-primary transition-colors font-mono"
                     />
                     <button
                       type="button"
                       onClick={addIpcTag}
-                      className="bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-300 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1 cursor-pointer"
+                      className="bg-bg-panel border border-border-main hover:border-text-muted text-text-main px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1 cursor-pointer"
                     >
                       <Plus className="w-3.5 h-3.5" />
                       Add IPC Tag
@@ -661,11 +659,11 @@ export const Home: React.FC = () => {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex items-center gap-4 pt-4 border-t border-slate-800">
+                <div className="flex items-center gap-4 pt-4 border-t border-border-main">
                   <button
                     type="submit"
                     disabled={loading}
-                    className="flex-1 bg-white text-slate-950 py-2.5 rounded-lg text-sm font-semibold hover:bg-slate-200 disabled:bg-slate-800 disabled:text-slate-500 transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                    className="flex-1 bg-brand-primary hover:opacity-90 text-white py-2.5 rounded-lg text-sm font-semibold disabled:bg-bg-panel disabled:text-text-muted transition-colors flex items-center justify-center gap-2 cursor-pointer"
                   >
                     {loading ? (
                       <>
@@ -682,7 +680,7 @@ export const Home: React.FC = () => {
                   <button
                     type="button"
                     onClick={handleCancelReview}
-                    className="bg-slate-950 border border-slate-800 hover:border-slate-700 px-5 py-2.5 rounded-lg text-sm font-semibold text-slate-400 hover:text-white transition-colors cursor-pointer"
+                    className="bg-bg-panel border border-border-main hover:border-text-muted px-5 py-2.5 rounded-lg text-sm font-semibold text-text-muted hover:text-text-main transition-colors cursor-pointer"
                   >
                     Cancel
                   </button>
