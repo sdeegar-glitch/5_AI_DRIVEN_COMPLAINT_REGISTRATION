@@ -15,6 +15,12 @@ export const Signup: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters long.");
+      return;
+    }
+
     setLoading(true);
 
     console.log("[Signup Page] Submitting signup form for:", email);
@@ -30,7 +36,23 @@ export const Signup: React.FC = () => {
       }
     } catch (err: any) {
       console.error("[Signup Page] Signup request failed:", err);
-      setError(err.message || "An unexpected error occurred during registration.");
+      
+      let displayError = err.message || "An unexpected error occurred during registration.";
+      if (err.error) {
+        const fieldErrors: string[] = [];
+        Object.entries(err.error).forEach(([field, details]: [string, any]) => {
+          if (details && typeof details === "object" && "_errors" in details) {
+            const errors = (details as any)._errors;
+            if (Array.isArray(errors) && errors.length > 0) {
+              fieldErrors.push(`${field}: ${errors.join(", ")}`);
+            }
+          }
+        });
+        if (fieldErrors.length > 0) {
+          displayError = `Validation failed - ${fieldErrors.join("; ")}`;
+        }
+      }
+      setError(displayError);
     } finally {
       setLoading(false);
     }
@@ -96,6 +118,7 @@ export const Signup: React.FC = () => {
               <input
                 type="password"
                 required
+                minLength={6}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
