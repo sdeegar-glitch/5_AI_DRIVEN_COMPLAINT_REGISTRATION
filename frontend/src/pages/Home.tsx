@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useAuth } from "../context/AuthContext.js";
 import { api } from "../lib/axios.js";
 import { 
@@ -44,6 +44,40 @@ export const Home: React.FC = () => {
   const [fileType, setFileType] = useState<string | null>(null);
   const [draft, setDraft] = useState<ParsedDraft | null>(null);
   const [newIpcTag, setNewIpcTag] = useState("");
+
+  // Restore draft from LocalStorage on mount
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("abhay_draft_backup");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed.draft) {
+          console.log("[Home Page] Restored draft backup from LocalStorage.");
+          setDraft(parsed.draft);
+          setImageUrl(parsed.imageUrl || null);
+          setFileType(parsed.fileType || null);
+        }
+      }
+    } catch (err) {
+      console.error("[Home Page] Failed to restore draft backup:", err);
+    }
+  }, []);
+
+  // Backup draft to LocalStorage on change
+  useEffect(() => {
+    try {
+      if (draft) {
+        localStorage.setItem(
+          "abhay_draft_backup",
+          JSON.stringify({ draft, imageUrl, fileType })
+        );
+      } else {
+        localStorage.removeItem("abhay_draft_backup");
+      }
+    } catch (err) {
+      console.error("[Home Page] Failed to save draft backup:", err);
+    }
+  }, [draft, imageUrl, fileType]);
 
   const handleLogout = async () => {
     console.log("[Home Page] Triggering logout...");

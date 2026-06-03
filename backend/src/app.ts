@@ -5,6 +5,7 @@ import morgan from "morgan";
 import { env } from "./config/env.js";
 import authRouter from "./apps/auth/route.js";
 import complaintsRouter from "./apps/complaints/route.js";
+import adminRouter from "./apps/admin/route.js";
 
 console.log("[app.ts] [ENTRY] Bootstrapping backend server application...");
 
@@ -53,6 +54,7 @@ app.use((req, res, next) => {
 // Mount Domain Route Modules
 app.use("/api/auth", authRouter);
 app.use("/api/complaints", complaintsRouter);
+app.use("/api/admin", adminRouter);
 
 // Health check endpoint
 app.get("/api/health", (req, res) => {

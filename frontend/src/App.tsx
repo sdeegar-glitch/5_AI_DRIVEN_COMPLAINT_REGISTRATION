@@ -6,6 +6,12 @@ import { Signup } from "./pages/Signup.js";
 import { Verify } from "./pages/Verify.js";
 import { ForgotPassword } from "./pages/ForgotPassword.js";
 import { Home } from "./pages/Home.js";
+import { Layout } from "./components/Layout.js";
+import { ComplaintsList } from "./pages/ComplaintsList.js";
+import { ComplaintDetails } from "./pages/ComplaintDetails.js";
+import { AdminDashboard } from "./pages/AdminDashboard.js";
+import { Profile } from "./pages/Profile.js";
+import { Settings } from "./pages/Settings.js";
 
 function App() {
   return (
@@ -18,10 +24,18 @@ function App() {
           <Route path="/verify" element={<Verify />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
 
-          {/* Protected Routes */}
+          {/* Protected User Routes */}
           <Route element={<PrivateRoute />}>
-            <Route path="/" element={<Home />} />
-            {/* We will add other routes here (/complaints, /profile, /settings, /admin) */}
+            <Route path="/" element={<Layout><Home /></Layout>} />
+            <Route path="/complaints" element={<Layout><ComplaintsList /></Layout>} />
+            <Route path="/complaints/:id" element={<Layout><ComplaintDetails /></Layout>} />
+            <Route path="/profile" element={<Layout><Profile /></Layout>} />
+            <Route path="/settings" element={<Layout><Settings /></Layout>} />
+          </Route>
+
+          {/* Protected Admin Routes */}
+          <Route element={<PrivateRoute allowedRoles={["ADMIN"]} />}>
+            <Route path="/admin" element={<Layout><AdminDashboard /></Layout>} />
           </Route>
 
           {/* Catch-all Redirect */}
