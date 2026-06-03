@@ -1,27 +1,6 @@
 @import "tailwindcss";
 
 @theme {
-  /* Override Slate color steps to map to our CSS variable tokens */
-  --color-slate-950: var(--bg-base);
-  --color-slate-900: var(--bg-surface);
-  --color-slate-850: var(--bg-panel);
-  --color-slate-800: var(--border-main);
-  --color-slate-700: var(--border-hover);
-  --color-slate-500: var(--text-muted);
-  --color-slate-400: var(--text-muted);
-  --color-slate-300: var(--text-muted);
-  --color-slate-200: var(--text-main);
-  --color-slate-100: var(--text-main);
-
-  /* Map indigo to our primary brand color */
-  --color-indigo-400: var(--brand-primary);
-  --color-indigo-500: var(--brand-primary);
-  
-  /* Map red to our accent orange color */
-  --color-red-500: var(--brand-accent);
-  --color-red-400: var(--brand-accent);
-
-  /* Add our custom theme variables too */
   --color-bg-base: var(--bg-base);
   --color-bg-surface: var(--bg-surface);
   --color-bg-panel: var(--bg-panel);
@@ -38,7 +17,6 @@
   --bg-surface: #FFFFFF;
   --bg-panel: #EAEAEA;
   --border-main: #D3D6DA;
-  --border-hover: #A0A5AD;
   --text-main: #303841;
   --text-muted: #616D7A;
   
@@ -52,7 +30,6 @@
   --bg-surface: #242930;
   --bg-panel: #1A1D22;
   --border-main: #424B57;
-  --border-hover: #5A6675;
   --text-main: #F5F5F5;
   --text-muted: #9AA5B1;
   
